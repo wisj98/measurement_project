@@ -149,8 +149,8 @@ def start_measurement():
                 else:
                     labels[i][2].configure(text = f"{recipes[choice][i][0]}")
             time.sleep(0.5)
-            right_container.after(1000, update_labels, labels, values)
-        right_container.after(1000, update_labels, labels, values)
+            right_container.after(250, update_labels, labels, values)
+        right_container.after(500, update_labels, labels, values)
         def measurement(num):
             measurement_popup = customtkinter.CTkToplevel(measurement_window)
             measurement_popup.geometry("800x500")
@@ -169,7 +169,7 @@ def start_measurement():
             target = standard * values[num][1]
             popup_container_2_highest = customtkinter.CTkLabel(master=popup_container_2, text = f"하한\n{round(target - target * values[num][2] / 100,2)}g", font=("Arial", 30, "bold"), width = 100, height = 100)
             popup_container_2_lowest = customtkinter.CTkLabel(master=popup_container_2, text = f"상한\n{round(target + target * values[num][2] / 100,2)}g", font=("Arial", 30, "bold"), width = 100, height = 100)
-            popup_container_2_perfect = customtkinter.CTkLabel(master=popup_container_2, text = f"적정\n{target}g", font=("Arial", 30, "bold"), width = 100, height = 100)
+            popup_container_2_perfect = customtkinter.CTkLabel(master=popup_container_2, text = f"적정\n{round(target, 2)}g", font=("Arial", 30, "bold"), width = 100, height = 100)
 
             popup_container_2_highest.grid(row=0, column=0, sticky="nsew", pady=10, padx =10)
             popup_container_2_lowest.grid(row=0, column=1, sticky="nsew", pady=10, padx =10)
@@ -183,10 +183,11 @@ def start_measurement():
             popup_container_3.grid(row=2, column = 0, sticky="nsew", pady=10, padx =10)
             now = 0
             start = values[num][0]
+            others = sum([x[0] for x in values]) - start
             def update_value():
                 def hsv_to_rgb(h, s, v):
                     return colorsys.hsv_to_rgb(h / 360, s, v)
-                nonlocal start, now
+                nonlocal start, now, others
                 now = start + 1 #설정 필요
                 # if target != 0:
                 #     if abs(now - target) > (target * values[num][1] / 100):
